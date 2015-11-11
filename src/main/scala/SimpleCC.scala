@@ -11,11 +11,14 @@ object SimpleCC {
 
 
     //  Prepare data
-    val linksData = Array((1, 3), (2, 1), (3,1), (3,4), (4,1), (4,2), (5,6), (6,5))
+    val linksData = Array((1, 3), (2, 1), (3,1), (3,4), (4,1), (4,2), (5,6))
 
     //  RDD of (url, url) pairs
     //  RDD[(String, String)]
-    val linksRDD = sc.parallelize(linksData)
+    val linksRDD = sc.parallelize(linksData).flatMap {
+      case (u, v) =>
+        List((u, v), (v, u))
+    }
 
     //  RDD of (url, neighbors) pairs
     //  RDD[(String, Iterable[String])]
