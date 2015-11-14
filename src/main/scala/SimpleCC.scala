@@ -62,8 +62,4 @@ object SimpleCC {
 
     sc.stop()
   }
-
-  def min(a:Int, b:Int):Int = {
-    Math.min(a, b)
-  }
 }
