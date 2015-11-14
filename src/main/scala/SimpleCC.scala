@@ -4,11 +4,10 @@ import org.apache.spark.SparkContext._
 
 object SimpleCC {
   def main(args: Array[String]) {
-    val ITERATIONS = 10
-
     val conf = new SparkConf().setAppName("Simple Connected Components")
     val sc = new SparkContext(conf)
 
+    val startMs = System.currentTimeMillis()
 
     //  Prepare data
     val linksData = Array((1, 3), (2, 1), (3,1), (3,4), (4,1), (4,2), (5,6))
@@ -30,6 +29,7 @@ object SimpleCC {
     var ranks = links.keys.map(u => (u, u))
 
     var ok = true
+    var iterations = 0
     while (ok) {
       val changes = sc.accumulator(0)
       val contribs = links.join(ranks).values.flatMap {
@@ -46,11 +46,17 @@ object SimpleCC {
             (url, ownRank)
           }
       }
+      iterations += 1
       ok = changes.value > 0
     }
 
     // Return an array that contains all of the elements in this RDD.
     val output = ranks.collect()
+
+    val endMs = System.currentTimeMillis()
+
+    println("iterations: "+iterations)
+    println("time: "+(endMs-startMs))
 
     output.foreach(tup => println(tup._1 + " " + tup._2))
 
