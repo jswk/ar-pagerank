@@ -29,7 +29,9 @@ object SimpleCC {
     // Pass each value in the key-value pair RDD through a map function without changing the keys; this also retains the original RDD's partitioning.
     var ranks = links.keys.map(u => (u, u))
 
-    for (i <- 1 to ITERATIONS) {
+    var ok = true
+    while (ok) {
+      val changes = sc.accumulator(0)
       val contribs = links.join(ranks).values.flatMap {
         case (urls, rank) =>
           urls.map(url => (url, rank))
@@ -37,14 +39,20 @@ object SimpleCC {
       val minRanks = contribs.reduceByKey(Math.min)
       ranks = minRanks.join(ranks).map {
         case (url, (ownRank, neighborRank)) =>
-          (url, Math.min(ownRank, neighborRank))
+          if (ownRank > neighborRank) {
+            changes += 1
+            (url, neighborRank)
+          } else {
+            (url, ownRank)
+          }
       }
+      ok = changes.value > 0
     }
 
     // Return an array that contains all of the elements in this RDD.
     val output = ranks.collect()
 
-    output.foreach(tup => println(tup._1 + " has rank: " + tup._2 + "."))
+    output.foreach(tup => println(tup._1 + " " + tup._2))
 
     sc.stop()
   }
