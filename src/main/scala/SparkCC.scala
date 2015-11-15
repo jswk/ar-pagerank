@@ -53,6 +53,9 @@ object SparkCC {
             (url, ownRank)
           }
       }
+      ranks.cache()
+      ranks.count()
+
       iterations += 1
       ok = changes.value > 0
     }
