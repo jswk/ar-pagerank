@@ -32,21 +32,25 @@ object SimpleCC {
     var iterations = 0
     while (ok) {
       val changes = sc.accumulator(0)
+      val total = sc.accumulator(0)
       val contribs = links.join(ranks).values.flatMap {
         case (urls, rank) =>
           urls.map(url => (url, rank))
       }
       val minRanks = contribs.reduceByKey(Math.min)
       ranks = minRanks.join(ranks).map {
-        case (url, (ownRank, neighborRank)) =>
+        case (url, (ownRank, neighborRank)) => {
+          total += 1
           if (ownRank > neighborRank) {
             changes += 1
             (url, neighborRank)
           } else {
             (url, ownRank)
           }
+        }
       }
       iterations += 1
+      println("Changed: "+changes.value)
       ok = changes.value > 0
     }
 
