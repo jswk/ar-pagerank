@@ -44,7 +44,7 @@ object SparkCC {
           urls.map(url => (url, rank))
       }
       val minRanks = contribs.reduceByKey(Math.min)
-      ranks = minRanks.join(ranks).map {
+      ranks = ranks.join(minRanks).map {
         case (url, (ownRank, neighborRank)) =>
           if (ownRank > neighborRank) {
             changes += 1
