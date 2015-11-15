@@ -2,7 +2,7 @@
 module load plgrid/apps/spark
 
 PROJ_PATH=$HOME/AR/lab2/ar-pagerank
-NODE_COUNT=$(wc -l $PBS_NODEFILE | awk '{print $1}')
+NODE_COUNT=$(uniq $PBS_NODEFILE | wc -l | awk '{print $1}')
 
 start-multinode-spark-cluster.sh
 
