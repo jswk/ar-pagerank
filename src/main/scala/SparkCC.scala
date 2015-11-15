@@ -24,11 +24,12 @@ object SparkCC {
     val ctx = new SparkContext(sparkConf)
 
     val nodeCount = args(1).toInt
+    println("Input file: "+args(0))
     println("Nodes: "+nodeCount)
 
     val startMs = System.currentTimeMillis()
 
-    val lines = ctx.textFile(args(0), 1)
+    val lines = ctx.textFile(args(0))
     val links = lines.map{ s =>
       val parts = s.split("\\s+")
       (Integer.parseInt(parts(0)), Integer.parseInt(parts(1)))
