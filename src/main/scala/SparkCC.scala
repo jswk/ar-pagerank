@@ -3,7 +3,7 @@
  */
 
   import org.apache.spark.SparkContext._
-  import org.apache.spark.{SparkConf, SparkContext}
+  import org.apache.spark.{HashPartitioner, SparkConf, SparkContext}
 
 /**
  * Computes the PageRank of URLs from an input file. Input file should
@@ -16,12 +16,15 @@
  */
 object SparkCC {
   def main(args: Array[String]) {
-    if (args.length < 1) {
-      System.err.println("Usage: SparkPageRank <file> <iter>")
+    if (args.length < 2) {
+      System.err.println("Usage: SparkPageRank <file> <nodes>")
       System.exit(1)
     }
     val sparkConf = new SparkConf().setAppName("Connected Components")
     val ctx = new SparkContext(sparkConf)
+
+    val nodeCount = args(1).toInt
+    println("Nodes: "+nodeCount)
 
     val startMs = System.currentTimeMillis()
 
@@ -32,7 +35,10 @@ object SparkCC {
     }.flatMap {
       case (u, v) =>
         List((u, v), (v, u))
-    }.distinct().groupByKey().cache()
+    }.partitionBy(new HashPartitioner(nodeCount))
+      .distinct()
+      .groupByKey()
+      .cache()
     var ranks = links.keys.map(u => (u, u))
 
     var ok = true
