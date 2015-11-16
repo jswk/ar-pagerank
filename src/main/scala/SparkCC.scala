@@ -65,6 +65,8 @@ object SparkCC {
 
       iterations += 1
       ok = changes.value > 0
+
+      println("Iteration: "+iterations+" Changes: "+changes.value)
     }
 
     val output = ranks.collect()
