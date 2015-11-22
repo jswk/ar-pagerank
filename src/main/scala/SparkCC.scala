@@ -77,7 +77,7 @@ object SparkCC {
     println("iterations: "+iterations)
     println("time: "+(endMs-startMs))
 
-    output.foreach(tup => println(tup._1 + " " + tup._2))
+    // output.foreach(tup => println(tup._1 + " " + tup._2))
 
     ctx.stop()
   }
