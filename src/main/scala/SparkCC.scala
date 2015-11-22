@@ -16,11 +16,12 @@
  */
 object SparkCC {
   def main(args: Array[String]) {
-    if (args.length < 2) {
-      System.err.println("Usage: SparkPageRank <file> <nodes>")
+    if (args.length < 3) {
+      System.err.println("Usage: SparkPageRank <file> <nodes> <lvl of parallelism>")
       System.exit(1)
     }
     val sparkConf = new SparkConf().setAppName("Connected Components")
+    sparkConf.set("spark.default.parallelism", args(2))
     val ctx = new SparkContext(sparkConf)
 
     val nodeCount = args(1).toInt
