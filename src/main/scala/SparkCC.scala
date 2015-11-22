@@ -46,6 +46,8 @@ object SparkCC {
     var ok = true
     var iterations = 0
     while (ok) {
+      val itStart = System.currentTimeMillis()
+
       val changes = ctx.accumulator(0)
       val contribs = links.join(ranks).values.flatMap {
         case (urls, rank) =>
@@ -61,13 +63,16 @@ object SparkCC {
             (url, ownRank)
           }
       }
+
       ranks.cache()
       ranks.count()
 
       iterations += 1
       ok = changes.value > 0
 
-      println("Iteration: "+iterations+" Changes: "+changes.value)
+      val itEnd = System.currentTimeMillis()
+
+      println("Iteration: "+iterations+" Changes: "+changes.value+ " Leap: "+(itEnd-itStart))
     }
 
     val output = ranks.collect()
