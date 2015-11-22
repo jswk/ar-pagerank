@@ -7,6 +7,9 @@ RESULT_PATH=$HOME/AR/lab2/results
 NODE_COUNT=$(awk '{print $1}' $PBS_NODEFILE | sort | uniq | wc -l)
 LVL_OF_PARALLELISM=36
 
+echo "spark.driver.memory 8g" >> $SPARK_CONF_DIR/spark-defaults.conf
+echo "spark.executor.memory 8g" >> $SPARK_CONF_DIR/spark-defaults.conf
+
 start-multinode-spark-cluster.sh
 
 $SPARK_HOME/bin/spark-submit \
