@@ -16,7 +16,7 @@ $SPARK_HOME/bin/spark-submit \
     --class SparkCC \
     --master spark://`hostname`:7077 \
     ${PROJ_PATH}/target/scala-2.10/sparkpagerank_2.10-1.0.jar \
-    ${DATA_PATH}/web-BerkStan.txt $NODE_COUNT $LVL_OF_PARALLELISM > ${RESULT_PATH}/BerkStan-${NODE_COUNT}
+    ${DATA_PATH}/web-NotreDame.txt $NODE_COUNT $LVL_OF_PARALLELISM > ${RESULT_PATH}/NotreDame-${NODE_COUNT}
 
 $SPARK_HOME/bin/spark-submit \
     --class SparkCC \
@@ -28,12 +28,12 @@ $SPARK_HOME/bin/spark-submit \
     --class SparkCC \
     --master spark://`hostname`:7077 \
     ${PROJ_PATH}/target/scala-2.10/sparkpagerank_2.10-1.0.jar \
-    ${DATA_PATH}/web-NotreDame.txt $NODE_COUNT $LVL_OF_PARALLELISM > ${RESULT_PATH}/NotreDame-${NODE_COUNT}
+    ${DATA_PATH}/web-Stanford.txt $NODE_COUNT $LVL_OF_PARALLELISM > ${RESULT_PATH}/Stanford-${NODE_COUNT}
 
 $SPARK_HOME/bin/spark-submit \
     --class SparkCC \
     --master spark://`hostname`:7077 \
     ${PROJ_PATH}/target/scala-2.10/sparkpagerank_2.10-1.0.jar \
-    ${DATA_PATH}/web-Stanford.txt $NODE_COUNT $LVL_OF_PARALLELISM > ${RESULT_PATH}/Stanford-${NODE_COUNT}
+    ${DATA_PATH}/web-BerkStan.txt $NODE_COUNT $LVL_OF_PARALLELISM > ${RESULT_PATH}/BerkStan-${NODE_COUNT}
 
 stop-multinode-spark-cluster.sh
